@@ -5,179 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录 | XX系统</title>
-    <style>
-        body {
-            margin: 0;
-            background-image: url("login_background_image.png");
-            /* 设置背景图片的路径 */
-            background-size: cover;
-            /* 图片将被调整以覆盖整个容器 */
-            background-repeat: no-repeat;
-            /* 防止背景图片重复显示 */
-            background-attachment: fixed;
-            /* 使背景图片固定，不随滚动而移动 */
-            /* 可以根据需要添加其他样式属性，比如背景颜色、边距等 */
-        }
-
-        .root-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .login-container {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 50px;
-            width: 300px;
-        }
-
-        .login-tip {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            column-gap: 5px;
-            background-color: #eee;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            padding: 10px;
-            font-size: 0.75rem;
-        }
-
-        .login-tip span {
-            text-align: center;
-            width: 100%;
-            flex-grow: 1;
-        }
-
-        .login-tip button {
-            padding-top: 5px;
-            border: none;
-            font-size: inherit;
-            color: inherit;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        .login-container h1 {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.75rem;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            /* 让输入框的宽度包括padding和border */
-        }
-
-        .login-btn {
-            display: block;
-            width: 100%;
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #0d6efd;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .login-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .register-btn {
-            display: block;
-            margin-right: 0;
-            margin-left: auto;
-            padding: 10px;
-            background-color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: right;
-            color: #666;
-        }
-
-        .register-btn:hover {
-            background-color: #eee;
-        }
-
-    </style>
+    <!-- vue -->
+    <script src="../static/vue/vue@3.3.4_vue.global.js"></script>
+    <!-- axios -->
+    <script src="../static/axios/axios@1.4.0_axios.min.js"></script>
+    <!-- element-ui-plus -->
+    <link rel="stylesheet" href="../static/element-plus/element-plus@2.3.9_index.css">
+    <script src="../static/element-plus/element-plus@2.3.9_index.full.min.js"></script>
+    <!-- element-plus-icons-vue-->
+    <script src="../static/element-plus_icons-vue/element-plus_icons-vue@2.1.0_index.iife.min.js"></script>
 </head>
 
 <body>
+<div id="app">
     <div class="root-container">
-        <div class="login-container">
-            <h1>欢迎使用</h1>
-            <div class="login-tip">
+        <div class="login_container">
+            <h1>欢迎使用 {{title}}</h1>
+
+            <div class="login_tip">
                 <span>检测到当前{{username}}用户已登录</span>
                 <button style="color: #198754;">进入用户主页</button>
                 <button style="color: #dc3545;">注销登录状态</button>
             </div>
+
             <form>
-                <div class="form-group">
-                    <label for="username">用户名:</label>
-                    <input type="text" id="username" name="username" placeholder="">
+                <div class="form_group">
+                    <el-input class="input_box" prefix-icon="User" v-model="username" placeholder="用户名"/>
                 </div>
-                <div class="form-group">
-                    <label for="password">密码:</label>
-                    <input type="password" id="password" name="password" placeholder="">
+                <div class="form_group">
+                    <el-input class="input_box" type="password" prefix-icon="Lock" show-password v-model="password"
+                              placeholder="密码"/>
                 </div>
             </form>
-            <button class="login-btn" id="login-btn">登录</button>
-            <button class="register-btn" id="register-btn">注册账户</button>
+            <el-button class="login_btn" id="loginBtn" type="primary" :disabled="!loginBtnEnable"
+                       :loading="this.loading" @click="loginBtnClick">登 录
+            </el-button>
+            <div class="form_group">
+                <button class="register_btn">注册账户</button>
+            </div>
         </div>
-    </div>
-    <div style="position: fixed; bottom: 0; width: 100%;">
-        <p style="text-align: center; color: #eee; font-size: 0.75rem;">XX管理系统 V1.0 版权所有 2023</p>
     </div>
 
-    <!-- 模态对话框：注册账户 -->
-    <div class="modal-dialog-mask" id="register-dialog">
-        <div class="dialog-container">
-            <div class="dialog-title">
-                <span>注册账户</span>
-            </div>
-            <div class="dialog-content">
-                <div class="form-group">
-                    <label for="new-username">设置用户名:</label>
-                    <input type="text" id="new-username" name="username">
-                </div>
-                <div class="form-group">
-                    <label for="new-password">设置密码:</label>
-                    <input type="password" id="new-password" name="password">
-                </div>
-                <div class="form-group">
-                    <label for="new-password2">再次确认你的密码:</label>
-                    <input type="password" id="new-password2" name="password">
-                </div>
-                <div class="dialog-footer">
-                    <button class="dialog-footer-ok" id="register-dialog-ok-btn">确定</button>
-                    <button class="dialog-footer-cancel" id="register-dialog-cancel-btn">取消</button>
-                </div>
-            </div>
-        </div>
+    <div style="position: fixed; bottom: 0; width: 100%;">
+        <p style="text-align: center; color: #aaa; font-size: 0.75rem;">{{title}} 版权所有© 2020-2023</p>
     </div>
+</div>
 </body>
-<link rel="stylesheet" type="text/css" href="../components/dialog.css">
+
 <script src="index.js"></script>
+<link rel="stylesheet" href="index.css">
 </html>

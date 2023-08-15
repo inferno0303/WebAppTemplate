@@ -1,49 +1,110 @@
-// 打开或关闭id为 xx 的对话框
-function changeDialogVisible(id, visible) {
-    const registerDialogElement = document.getElementById(id);
-    if (visible == true) {
-        registerDialogElement.style.display = 'flex';
+// 定义Vue组件
+const App = {
+    data() {
+        return {
+            title: "XX管理系统",
+            username: "",
+            password: "",
+            loading: false,
+            currentUser: {"username": null, "role": null, "last_login_time": null},
+            isLogin: false,
+        };
+    },
+    computed: {
+        isLoginBtnEnable() {
+            return this.username !== '' && this.password !== '';
+        },
+    },
+    methods: {
+        // 登录请求
+        async loginBtnClick() {
+            this.loading = true;
+            await axios({
+                method: "POST",
+                url: "/login",
+                data: {"username": this.username, "password": this.password},
+                withCredentials: true
+            }).then(async resp => {
+                if (resp.data.code === 200) {
+                    ElementPlus.ElMessage({
+                        message: resp.data.message,
+                        type: 'success',
+                    });
+                    this.currentUser.username = resp.data.data.username;
+                    this.currentUser.role = resp.data.data.role;
+                    this.currentUser.last_login_time = resp.data.data.last_login_time;
+                    this.linkToHome(this.currentUser.role);
+                } else {
+                    ElementPlus.ElMessage({
+                        message: resp.data.message,
+                        type: 'error',
+                    });
+                    this.password = "";
+                }
+            }).catch(err => {
+                ElementPlus.ElMessage({
+                    message: err,
+                    type: 'error',
+                });
+            });
+            this.loading = false;
+        },
+        // 检查当前cookie是否有效
+        async checkLoginStatus() {
+            await axios({
+                method: "GET",
+                url: "/check_login_status",
+                withCredentials: true
+            }).then(resp => {
+                if (resp.data.code === 200) {
+                    this.currentUser.username = resp.data.data.username;
+                    this.currentUser.role = resp.data.data.role;
+                    this.currentUser.last_login_time = resp.data.data.last_login_time;
+                    this.isLogin = true;
+                } else if (resp.data.code === 403) {
+                    this.isLogin = false;
+                }
+            })
+        },
+        // 注销请求
+        async logoutBtnClick() {
+            await axios({
+                method: "GET",
+                url: "/logout",
+                withCredentials: true
+            }).then(async resp => {
+                if (resp.data.code === 200) {
+                    await this.checkLoginStatus();
+                    ElementPlus.ElMessage({
+                        message: "已注销登录",
+                        type: 'warning',
+                    });
+                }
+            })
+        },
+        // 前往各自的首页
+        async linkToHome(role) {
+            const currentURL = window.location.href;
+            const baseURL = currentURL.substring(0, currentURL.lastIndexOf("/"));
+            if (role === "user") {
+                location.href = baseURL + "/user.html"
+            } else if (role === "admin") {
+                location.href = baseURL + "/admin.html"
+            }
+        },
+        // 前往注册账户
+        async linkToSignUp() {
+            const currentURL = window.location.href;
+            const baseURL = currentURL.substring(0, currentURL.lastIndexOf("/"));
+            location.href = baseURL + "/sign_up.html"
+        }
+    },
+    async mounted() {
+        await this.checkLoginStatus();
     }
-    else {
-        registerDialogElement.style.display = 'none';
-    }
-}
-
-// 打开注册对话框
-const registerBtn = document.getElementById('register-btn');
-registerBtn.addEventListener('click', function () {
-    changeDialogVisible('register-dialog', true);
-});
-
-
-// 关闭注册对话框
-const dialogCancelBtn = document.getElementById('register-dialog').querySelector('#register-dialog-cancel-btn');
-dialogCancelBtn.addEventListener('click', function () {
-    changeDialogVisible('register-dialog', false);
-});
-
-// 确定注册按钮
-const dialogOkBtn = document.getElementById('register-dialog').querySelector('#register-dialog-ok-btn');
-const newUsernameInput = document.getElementById('new-username');
-const newPasswordInput = document.getElementById('new-password');
-const newPassword2Input = document.getElementById('new-password2');
-dialogOkBtn.addEventListener('click', function () {
-    if (newUsernameInput.value === '') {
-        alert("请设置用户名");
-        return;
-    }
-    if (newPasswordInput.value === '') {
-        alert("请设置密码");
-        return;
-    }
-    if (newPassword2Input.value === '') {
-        alert("请再次确认你的密码");
-        return;
-    }
-    if (newPasswordInput.value !== newPassword2Input.value) {
-        alert("两次输入的密码不一致");
-        return;
-    }
-    // 发送请求
-    changeDialogVisible('register-dialog', false);
-});
+};
+const app = Vue.createApp(App)
+app.use(ElementPlus);
+app.component('User', ElementPlusIconsVue.User);
+app.component('Lock', ElementPlusIconsVue.Lock);
+app.mount("#app");
