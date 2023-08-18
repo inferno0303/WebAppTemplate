@@ -36,7 +36,8 @@ button, input {
 }
 
 .login_tip {
-    display: flex;
+    /* .login_tip样式 仅在检测到当前cookie已经登录的时候显示，默认 display: none; 需要显示的时候改为 display: flex;*/
+    display: none;
     margin: 20px auto;
     padding: 10px;
     width: 300px;

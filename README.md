@@ -26,6 +26,10 @@ author: inferno0303@github
 - 20230814  
 initialize repository
 
-- 20230816
-feat: 添加了Vue、axios、element-plus、HarmonyOS_Sans_SC字体
+- 20230816  
+feat: 添加了Vue、axios、element-plus、HarmonyOS_Sans_SC字体  
 feat: 重写了login.html页面的全部逻辑，移除了注册账户对话框
+
+- 20230818  
+fix: 修改了login页面的逻辑  
+feat: 创建了后端模板  
