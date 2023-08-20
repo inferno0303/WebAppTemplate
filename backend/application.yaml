@@ -1,0 +1,16 @@
+# tomcat配置
+server:
+  port: 8888
+
+# JDBC配置
+spring:
+  datasource:
+    # mysql数据源
+    # url: jdbc:mysql://127.0.0.1:3306/test_paper_gen_2
+    # driver-class-name: com.mysql.cj.jdbc.Driver
+    # username: root
+    # password: 12345678
+
+    # SQLite数据源
+    url: jdbc:sqlite:sqlite.db
+    driver-class-name: org.sqlite.JDBC
