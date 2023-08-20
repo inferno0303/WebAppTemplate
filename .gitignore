@@ -3,4 +3,6 @@
 
 # all hidden files
 .*
+
+# exclude .gitignore
 !.gitignore
