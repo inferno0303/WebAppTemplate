@@ -2,34 +2,20 @@
 axios.defaults.baseURL = 'http://127.0.0.1:8888';
 axios.defaults.withCredentials = true;
 
-// axios添加响应拦截器
-axios.interceptors.response.use(function (response) {
-    if (response.status === 200) {
-        return response;
-    } else if (response.status === 403) {
-        alert("403拦截");
-        return response;
-    }
-    return response;
-}, function (error) {
-    // 对响应错误做点什么
-    return Promise.reject(error);
-});
-
 // 定义Vue组件
 const App = {
 
     data() {
         return {
-            title: "XX管理系统",
-            loginBox: {"username": null, "password": null},
+            title: "基于xbc的管理系统",
+            // 登录信息
+            loginBox: { "username": null, "password": null },
             LoginBtnLoading: false,
-            currentUser: {"username": null, "role": null, "last_login_time": null},
+            currentUser: { "username": null, "role": null, "last_login_time": null },
             isLogin: false,
-
-            // 注册对话框
+            // 注册信息
             dialogVisible: false,
-            register: {"username": null, "email": null, "password": null, "password_again": null},
+            register: { "username": null, "email": null, "password": null, "password_again": null },
             registerBtnLoading: false
         };
     },
@@ -52,38 +38,26 @@ const App = {
 
         // 检查登录状态
         async http_checkLoginStatus() {
-            await axios({
-                method: "GET",
-                url: "/check_login_status",
-                withCredentials: true
-            })
+            await axios.get("/check_login_status")
                 .then(response => {
                     if (response.data.code === 200) {
                         this.currentUser.username = response.data.data.username;
                         this.currentUser.role = response.data.data.role;
                         this.currentUser.last_login_time = response.data.data.last_login_time;
                         this.isLogin = true;
-                        ElementPlus.ElMessage({
-                            message: "http_checkLoginStatus", type: 'success',
-                        });
                     } else if (response.data.code === 403) {
                         this.isLogin = false;
-                        ElementPlus.ElMessage({
-                            message: "http_checkLoginStatus", type: 'message',
-                        });
                     }
                 })
-                .catch(err => {
-                    console.log(err);
-                })
-
+                .catch(err => {})
         },
 
-        // 点击按钮，注册
+        // 注册用户的请求
         async onClick_registerBtn() {
             this.registerBtnLoading = true;
             // 校验数据
             if (this.register.password !== this.register.password_again) {
+                this.register.password_again = null;
                 ElementPlus.ElMessage({
                     message: "两次输入的密码不一致", type: 'warning',
                 });
@@ -92,134 +66,107 @@ const App = {
             // 发起请求
             await axios({
                 method: "POST",
-                url: "/sign_up",
-                data: {"username": this.register.username, "password": this.register.password},
-                withCredentials: true
+                url: "/register",
+                data: { "username": this.register.username, "password": this.register.password }
             })
                 .then(response => {
                     if (response.data.code === 200) {
                         this.loginBox.username = this.register.username;
                         this.loginBox.password = this.register.password;
                         ElementPlus.ElMessage({
-                            message: "注册用户成功", type: 'success',
+                            message: response.data.message, type: 'success',
                         });
-                    } else if (response.data.code === 403) {
-                        this.isLogin = false;
+                    } else if (response.data.code === 500) {
                         ElementPlus.ElMessage({
-                            message: "onClick_registerBtn", type: 'message',
+                            message: response.data.message, type: 'warning',
                         });
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 })
-            await new Promise(resolve => {
-                setTimeout(resolve, 500);
-            });
-            this.register = {
-                "username": null, "email": null, "password": null, "password_again": null
-            };
-            this.registerBtnLoading = false;
-            this.dialogVisible = false;
+                .finally(() => {
+                    this.register = { "username": null, "email": null, "password": null, "password_again": null };
+                    this.registerBtnLoading = false;
+                    this.dialogVisible = false;
+                });
         },
 
-        // 按下登录按钮
+        // 登录请求
         async onClick_loginBtn() {
             this.LoginBtnLoading = true;
             await axios({
                 method: "POST",
                 url: "/login",
-                data: {"username": this.loginBox.username, "password": this.loginBox.password},
-                withCredentials: true
+                data: { "username": this.loginBox.username, "password": this.loginBox.password }
             })
-                .then(async resp => {
-                    if (resp.data.code === 200) {
+                .then(response => {
+                    // 登录成功
+                    if (response.data.code === 200) {
+                        this.currentUser.username = response.data.data.username;
+                        this.currentUser.role = response.data.data.role;
+                        this.currentUser.last_login_time = response.data.data.last_login_time;
+                        this._navigateToHomePage(response.data.data.role);
                         ElementPlus.ElMessage({
-                            message: "用户登录成功", type: 'success',
+                            message: response.data.message, type: 'success',
                         });
-                    } else {
-
+                    }
+                    // 登录失败
+                    else if (response.data.code === 403) {
+                        ElementPlus.ElMessage({
+                            message: response.data.message, type: 'warning',
+                        });
                     }
                 })
                 .catch(err => {
                     console.log(err)
                 })
-            await new Promise(resolve => {
-                setTimeout(resolve, 500);
-            });
             this.LoginBtnLoading = false;
         },
 
-        // 点击按钮，登录
-        async loginBtnClick() {
-            this.loading = true;
-            await axios({
-                method: "POST",
-                url: "/login",
-                data: {"username": this.username, "password": this.password},
-                withCredentials: true
-            }).then(async resp => {
-                if (resp.data.code === 200) {
-                    ElementPlus.ElMessage({
-                        message: resp.data.message, type: 'success',
-                    });
-                    this.currentUser.username = resp.data.data.username;
-                    this.currentUser.role = resp.data.data.role;
-                    this.currentUser.last_login_time = resp.data.data.last_login_time;
-                    this.linkToHome(this.currentUser.role);
-                } else {
-                    ElementPlus.ElMessage({
-                        message: resp.data.message, type: 'error',
-                    });
-                    this.password = "";
-                }
-            }).catch(err => {
-                ElementPlus.ElMessage({
-                    message: err, type: 'error',
-                });
-            });
-            this.loading = false;
-        },
-
-        // 按下按钮，注销
+        // 注销当前用户
         async onClick_logoutBtn() {
-            await axios({
-                method: "GET", url: "/logout", withCredentials: true
-            }).then(async resp => {
-                if (resp.data.code === 200) {
-                    await this.checkLoginStatus();
-                    ElementPlus.ElMessage({
-                        message: "已注销登录", type: 'warning',
-                    });
-                }
-            })
+            await axios.get("/logout")
+                .then(async response => {
+                    if (response.data.code === 200) {
+                        await this.http_checkLoginStatus();
+                        ElementPlus.ElMessage({
+                            message: response.data.message, type: 'success',
+                        });
+                    }
+                })
         },
 
-        // 私有，前往各自的首页
-        async _linkToHome(role) {
+        // 根据用户角色跳转到不同的落地页
+        _navigateToHomePage(role) {
+            // 获取当前页面的完整URL，并从完整URL中提取出域名部分
             const currentURL = window.location.href;
-            const baseURL = currentURL.substring(0, currentURL.lastIndexOf("/"));
-            if (role === "user") {
-                location.href = baseURL + "/user.html"
-            } else if (role === "admin") {
-                location.href = baseURL + "/admin.html"
-            }
-        },
-
-        // 事件，前往注册账户
-        async onCLick_linkToSignUp() {
-            const currentURL = window.location.href;
-            const baseURL = currentURL.substring(0, currentURL.lastIndexOf("/"));
-            location.href = baseURL + "/sign_up.html"
+            const currentDomain = new URL(currentURL).origin;
+            // 根据用户角色的不同，跳转到不同的落地页
+            if (role === 'user') window.location.href = currentDomain + "/home/";
+            if (role === 'admin') window.location.href = currentDomain + "/admin/";
         }
+
     },
 
     async mounted() {
         await this.http_checkLoginStatus();
     }
 };
+
 const app = Vue.createApp(App)
 app.use(ElementPlus);
-app.component('User', ElementPlusIconsVue.User);
-app.component('Lock', ElementPlusIconsVue.Lock);
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 app.mount("#app");
+
+// 按下回车，触发登录按钮的点击事件
+const loginBtn = document.getElementById("loginBtn");
+document.addEventListener("keydown", function (event) {
+    // 判断是否按下回车键（键码：13）
+    if (event.keyCode === 13) {
+        // 触发登录按钮的点击事件
+        loginBtn.click();
+    }
+});

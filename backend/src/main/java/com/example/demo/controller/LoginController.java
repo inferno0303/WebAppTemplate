@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-public class TestController {
+public class LoginController {
 
     @Autowired
     UserMapper userMapper;
@@ -41,27 +41,33 @@ public class TestController {
     @PostMapping("/login")
     public String login(@RequestBody User user, HttpSession session) {
         // 查询数据库
-        List<User> userList = userMapper.loginCheck(user);
+        List<User> userList = userMapper.queryUser(user);
         if (userList.size() == 1) {
-            // 获取当前系统时间
-            Date date = new Date();
-
-            // 更新最后登录成功的时间
-            userMapper.updateLastLoginTime(userList.get(0), date);
-
-            // 将登录信息写入session
-            session.setAttribute("username", userList.get(0).getUsername());
-            session.setAttribute("role", userList.get(0).getRole());
-            session.setAttribute("last_login_time", date);
-
-            HashMap<String, Object> result = new HashMap<>();
-            result.put("username", userList.get(0).getUsername());
-            result.put("role", userList.get(0).getRole());
-            result.put("last_login_time", userList.get(0).getLast_login_time());
-            return Response.response(result, 200, "登录成功");
-        } else {
-            return Response.response(null, 403, "用户名或密码错误，或当前账户未通过管理员审核");
+            User _user = userList.get(0);
+            // 用户已启用
+            if (_user.getEnable() == 1) {
+                Date date = new Date();
+                userMapper.updateLastLoginTime(_user, date);
+                // 将登录信息写入session
+                session.setAttribute("username", _user.getUsername());
+                session.setAttribute("role", _user.getRole());
+                session.setAttribute("last_login_time", date);
+                HashMap<String, Object> result = new HashMap<>();
+                result.put("username", _user.getUsername());
+                result.put("role", _user.getRole());
+                result.put("last_login_time", _user.getLast_login_time());
+                return Response.response(result, 200, "用户登录成功");
+            }
+            // 用户未启用
+            else if (_user.getEnable() == 0) {
+                return Response.response(null, 403, "用户名" + user.getUsername() + "未通过管理员审核");
+            }
+            // 用户被封禁
+            else {
+                return Response.response(null, 403, "用户名" + user.getUsername() + "被禁止使用");
+            }
         }
+        return Response.response(null, 403, "用户名或密码错误");
     }
 
     @GetMapping("/logout")
@@ -74,7 +80,7 @@ public class TestController {
     public String register(@RequestBody User user, HttpSession session) {
         List<User> userByUsername = userMapper.getUserByUsername(user.getUsername());
         if (!userByUsername.isEmpty()) {
-            return Response.response(null, 500, "用户名重复");
+            return Response.response(null, 500, "用户名已被使用");
         }
         user.setRole("user");
         user.setCreate_time(new Date().getTime());

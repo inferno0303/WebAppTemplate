@@ -23,12 +23,14 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         try {
-            // 加载数据库表结构初始化文件
             ClassPathResource resource = new ClassPathResource("init.sql");
             byte[] bytes = FileCopyUtils.copyToByteArray(resource.getInputStream());
             String sql = new String(bytes, StandardCharsets.UTF_8);
-            // 执行初始化表结构SQL语句
+
+            // 执行初始化SQL语句，禁用事务管理
             jdbcTemplate.execute(sql);
+            // jdbcTemplate.execute("INSERT INTO `user` (username, password, role, create_time, enable) VALUES (\"admin\", \"admin\", \"admin\", 0, 1);");
+            // jdbcTemplate.execute("INSERT INTO `user` (username, password, role, create_time, enable) VALUES (\"a\", \"a\", \"user\", 0, 1);");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

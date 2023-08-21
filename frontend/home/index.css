@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'HarmonyOS_Sans_SC'; /* 自定义字体的名称 */
+    src: url('../static/fonts/HarmonyOS_Sans_SC_Regular.ttf') format('truetype'); /* 字体文件的路径和格式 */
+    /* 可选的其他字体属性，例如 font-weight 和 font-style */
+}
+
+
+body {
+    margin: 0;
+    font-family: 'HarmonyOS_Sans_SC', sans-serif;
+}
+
+button, input {
+    font-family: inherit;
+}

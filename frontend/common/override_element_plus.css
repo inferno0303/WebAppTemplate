@@ -1,0 +1,32 @@
+/* 用于覆盖element-plus的默认样式 */
+.el-dialog__header {
+    margin: 0;
+    padding: 0;
+    height: 45px;
+    background-color: #041725;
+}
+
+.el-dialog__title {
+    color: #fff;
+    font-size: 1rem;
+    line-height: 45px;
+    padding-left: 20px;
+    font-weight: bold;
+}
+
+.el-dialog__headerbtn {
+    /* 绝对定位，在标题栏右上 */
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    height: 45px;
+}
+
+.el-dialog__headerbtn:hover {
+    background-color: rgb(255, 0, 0, 0.3);
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+    color: #fff !important;
+}

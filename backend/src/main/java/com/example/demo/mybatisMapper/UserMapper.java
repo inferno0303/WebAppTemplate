@@ -15,8 +15,8 @@ public interface UserMapper {
     public List<String> getAllUser();
 
     // 登录检查
-    @Select("SELECT * FROM user WHERE username=#{username} AND password=#{password} AND enable=1")
-    public List<User> loginCheck(User user);
+    @Select("SELECT * FROM user WHERE username=#{username} AND password=#{password}")
+    public List<User> queryUser(User user);
 
     // 更新最后登录成功的时间
     @Select("UPDATE user SET last_login_time=#{date} WHERE id=#{user.id} AND username=#{user.username} AND password=#{user.password}")
