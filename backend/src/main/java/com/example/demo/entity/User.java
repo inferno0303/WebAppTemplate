@@ -12,8 +12,8 @@ public class User {
     private String phone;
     private String avatar;
     private int enable;
-    private Date last_login_time;
-    private Date create_time;
+    private long last_login_time;
+    private long create_time;
 
     public int getId() {
         return id;
@@ -87,19 +87,19 @@ public class User {
         this.enable = enable;
     }
 
-    public Date getLast_login_time() {
+    public long getLast_login_time() {
         return last_login_time;
     }
 
-    public void setLast_login_time(Date last_login_time) {
+    public void setLast_login_time(long last_login_time) {
         this.last_login_time = last_login_time;
     }
 
-    public Date getCreate_time() {
+    public long getCreate_time() {
         return create_time;
     }
 
-    public void setCreate_time(Date create_time) {
+    public void setCreate_time(long create_time) {
         this.create_time = create_time;
     }
 }

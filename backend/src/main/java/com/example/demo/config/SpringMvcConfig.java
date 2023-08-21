@@ -30,7 +30,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                 // 排除未登录时可以访问的页面，以及所有静态资源
                 .excludePathPatterns(
                         "/hello",
-                        "/get_login_status",
+                        "/check_login_status",
                         "/login",
                         "/register",
                         // 排除所有静态资源

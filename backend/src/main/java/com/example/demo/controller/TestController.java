@@ -77,7 +77,7 @@ public class TestController {
             return Response.response(null, 500, "用户名重复");
         }
         user.setRole("user");
-        user.setCreate_time(new Date());
+        user.setCreate_time(new Date().getTime());
         // 默认不启用该用户
         user.setEnable(0);
         Integer effectRows = userMapper.addNewUser(user);

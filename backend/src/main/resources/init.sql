@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS user (
     phone TEXT,
     avatar TEXT,
     enable INTEGER,
-    last_login_time TEXT,
-    create_time TEXT
+    last_login_time INTEGER,
+    create_time INTEGER
 )
