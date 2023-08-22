@@ -20,6 +20,7 @@
 
 <body>
     <div id="app">
+        <!-- headers -->
         <link rel="stylesheet" href="../common/headers.css" />
         <div class="headers">
             <div class="headers_left">基于xbc的管理系统</div>
@@ -34,6 +35,78 @@
                 <a class="navigate_btn" href="/login/">退出登录</a>
             </div>
         </div>
+        <!-- headers end -->
+
+        <!-- container -->
+        <div class="container">
+
+            <el-divider content-position="left">个人信息</el-divider>
+            <div class="card">
+                <div class="card_header">
+                    <div>
+                        <div style="line-height: 2; font-size: 1.2rem; font-weight: bold; color: #337ecc;">个人资料</div>
+                        <div style="font-size: 0.8rem; color: #666;">查看或更改您的个人资料</div>
+                    </div>
+                    <div>
+                        <el-button v-if="!isEdit" @click="this.isEdit = !this.isEdit" type="primary"
+                            icon="Edit">编辑信息</el-button>
+                        <el-button v-else @click="this.isEdit = !this.isEdit" type="success"
+                            icon="CircleCheckFilled">保存更改</el-button>
+                    </div>
+                </div>
+
+                <div class="form_box">
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">头像</div>
+                        <img class="avatar" src="https://q4.qlogo.cn/g?b=qq&nk=770409504@qq.com&s=5"
+                            @click="this.onClick_changeAvatar" alt="头像" />
+                    </div>
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">用户名</div>
+                        <div class="text_hint">{{this.userInfo?.username}}</div>
+                    </div>
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">昵称</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.nickname}}</div>
+                        <el-input v-else v-model="userInfo.nickname"></el-input>
+                    </div>
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">邮箱</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.email?? "未设置"}}</div>
+                        <el-input v-else v-model="userInfo.email"></el-input>
+                    </div>
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">密码</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.password}}</div>
+                        <el-input v-else v-model="userInfo.password"></el-input>
+                    </div>
+
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">性别</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.gender}}</div>
+                        <el-input v-else v-model="userInfo.gender"></el-input>
+                    </div>
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">电话</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.phone?? "未设置"}}</div>
+                        <el-input v-else v-model="userInfo.phone"></el-input>
+                    </div>
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">上次登录</div>
+                        <div class="text_hint">{{this.userInfo?.last_login_time?? "从未登录"}}</div>
+                    </div>
+                    <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">创建日期</div>
+                        <div class="text_hint">{{this.userInfo?.create_time?? "无"}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <el-divider content-position="left">其他信息</el-divider>
+
+        </div>
+
+
     </div>
 </body>
 

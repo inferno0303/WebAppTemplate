@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     id INTEGER PRIMARY KEY,
     username TEXT NOT NULL,
     password TEXT NOT NULL,
+    nickname TEXT,
     role TEXT,
     gender TEXT,
     email TEXT,

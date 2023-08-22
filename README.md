@@ -19,24 +19,28 @@ author: inferno0303@github
 
 
 ### 数据库
-`sqlite3.db`文件夹下就是数据库目录
+`sqlite.db`是sqlite数据库文件，运行时位于`backend/`下
 
 ## 更新历史
 
-- 20230814  
+### 20230814
 initialize repository
 
-- 20230816  
+### 20230816
 feat: 添加了Vue、axios、element-plus、HarmonyOS_Sans_SC字体  
 feat: 重写了login.html页面的全部逻辑，移除了注册账户对话框
 
-- 20230818  
+### 20230818
 fix: 修改了login页面的逻辑  
 feat: 创建了后端模板  
 
-- 20230820  
+### 20230820
 feat: 添加了sqlite到后端工程  
 
-- 20230821  
+### 20230821
 feat: 新增了404和500页面，添加了默认的sqlite表结构    
 refactor: 重构了登录接口  
+
+### 20230822
+feat: 实现了注册界面，登录跳转，公共headers样式
+refactor: 重构了登录界面样式

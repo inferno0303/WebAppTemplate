@@ -1,6 +1,8 @@
 @font-face {
-    font-family: 'HarmonyOS_Sans_SC'; /* 自定义字体的名称 */
-    src: url('../static/fonts/HarmonyOS_Sans_SC_Regular.ttf') format('truetype'); /* 字体文件的路径和格式 */
+    font-family: 'HarmonyOS_Sans_SC';
+    /* 自定义字体的名称 */
+    src: url('../static/fonts/HarmonyOS_Sans_SC_Regular.ttf') format('truetype');
+    /* 字体文件的路径和格式 */
     /* 可选的其他字体属性，例如 font-weight 和 font-style */
 }
 
@@ -10,6 +12,70 @@ body {
     font-family: 'HarmonyOS_Sans_SC', sans-serif;
 }
 
-button, input {
+button,
+input {
     font-family: inherit;
+}
+
+.container {
+    max-width: 1024px;
+    margin: 15px auto;
+    padding: 15px 60px;
+}
+
+.card {
+    max-width: 800px;
+    min-width: 500px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+    background-color: #fafafa;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+}
+
+.card_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 60px;
+    background-color: #eee;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.form_box {
+    display: grid;
+    row-gap: 1rem;
+    padding: 30px 60px;
+}
+
+/* 左边显示字段名，右边显示值 */
+.form_item {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    align-items: center;
+    column-gap: 3rem;
+    font-size: 14px;
+    color: #333;
+    line-height: 2.5;
+}
+
+.text_hint {
+    padding: 0 15px;
+    background-color: #eee;
+    border-radius: 4px;
+}
+
+/* 头像 */
+.avatar {
+    margin: 0 auto;
+    width: 100px;
+    height: auto;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.25s;
+}
+
+.avatar:hover {
+    filter: brightness(70%);
 }

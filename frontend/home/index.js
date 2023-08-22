@@ -7,7 +7,8 @@ const App = {
 
     data() {
         return {
-            
+            userInfo: { username: "正在获取", password: "********", role: "", gender: "男", enable: "1", email: "1234567890@github.com", phone: "1234567890", last_login_time: "1234567890", create_time: "1234567890", avatar: null },
+            isEdit: false
         };
     },
 

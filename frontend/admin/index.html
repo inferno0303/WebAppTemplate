@@ -20,16 +20,27 @@
 
 <body>
     <div id="app">
+        <!-- headers -->
         <link rel="stylesheet" href="../common/headers.css" />
-        <div class="headers" style="background-color: rgb(80, 16, 26);">
-            <div class="headers_left">基于xbc的管理系统</div>
+        <div class="headers">
+            <div class="headers_left" style="background-color: rgb(255, 0, 0, 0.3);">基于xbc的管理系统 管理端</div>
             <div class="headers_center">
-                <a class="navigate_btn" href="/admin/"><strong>管理员模式</strong></a>
+                <a class="navigate_btn" href="/admin/" style="background-color: #337ecc;">用户信息管理</a>
+                <a class="navigate_btn">页面2</a>
+                <a class="navigate_btn">页面3</a>
             </div>
             <div class="headers_right">
                 <a class="navigate_btn" href="/login/">退出管理员模式</a>
             </div>
         </div>
+        <!-- headers end -->
+
+        <!-- container -->
+        <div class="container">
+
+            <el-divider content-position="left">用户信息</el-divider>
+        </div>
+
     </div>
 </body>
 
