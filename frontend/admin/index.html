@@ -23,7 +23,8 @@
         <!-- headers -->
         <link rel="stylesheet" href="../common/headers.css" />
         <div class="headers">
-            <div class="headers_left" style="background-color: rgb(255, 0, 0, 0.3);">基于xbc的管理系统 管理端</div>
+            <div class="headers_left" style="background-color: rgb(255, 0, 0, 0.3);">基于xbc的管理系统<strong
+                    style="padding-left: 1rem;">管理端</strong></div>
             <div class="headers_center">
                 <a class="navigate_btn" href="/admin/" style="background-color: #337ecc;">用户信息管理</a>
                 <a class="navigate_btn">页面2</a>
@@ -39,6 +40,75 @@
         <div class="container">
 
             <el-divider content-position="left">用户信息</el-divider>
+            <div class="list">
+                <el-empty v-if="!this.userList.length" description="无数据"></el-empty>
+                <div class="list_item" v-for="(item, index) in this.userList" :key="index">
+
+                    <!-- 左边的信息部分，弹性扩展到最大宽度 -->
+                    <div
+                        style="display: flex; align-items: center; justify-content: flex-start; gap: 45px; flex-grow: 1; flex-shrink: 0;">
+                        <div class="text_small" style="color: #aaa;">
+                            #{{(this.currentPage - 1) * this.defaultPageSize + index + 1}}
+                        </div>
+                        <div class="list" style="row-gap: 8px;">
+                            <img :src="item.avatar" class="avatar" alt="{{item.username}}" />
+                            <div class="text_small text_align_center">用户名：{{item.username}}</div>
+                        </div>
+                        <div class="list" style="row-gap: 4px;">
+                            <div class="text_small">昵称：{{item.nickname}}</div>
+                            <div class="text_small">邮箱：{{item.email}}</div>
+                            <div class="text_small">电话：{{item.phone}}</div>
+                            <div class="text_small">性别：{{item.gender}}</div>
+                        </div>
+                        <div class="list" style="row-gap: 4px;">
+                            <div class="text_small">账户类型：{{item.role}}</div>
+                            <div class="text_small">密码：{{item.password}}</div>
+                            <div class="text_small">最后登录：{{item.last_login_time}}</div>
+                            <div class="text_small">注册时间：{{item.create_time}}</div>
+                        </div>
+                    </div>
+
+                    <!-- 右边的操作按钮，弹性缩小到最小宽度 -->
+                    <div
+                        style="display: flex; align-items: center; gap: 10px; flex-grow: 0; flex-shrink: 0;">
+
+
+                        <el-popconfirm v-if="item.enable === 0" @confirm="this.enableUser(item)" title="确认要通过注册审批吗？"
+                            confirm-button-text="确定" cancel-button-text="取消" confirm-button-type="danger">
+                            <template #reference>
+                                <el-button type="success" size="large" icon="Check" circle></el-button>
+                            </template>
+                        </el-popconfirm>
+                        
+                        <el-popconfirm v-else @confirm="this.disableUser(item)" title="确认要封禁账户吗？"
+                            confirm-button-text="确定" cancel-button-text="取消" confirm-button-type="warning">
+                            <template #reference>
+                                <el-button type="warning" size="large" icon="Close" circle></el-button>
+                            </template>
+                        </el-popconfirm>
+
+                        <el-tooltip content="编辑用户账户信息">
+                            <el-button @click="editUserBtnOnClick(item)" type="primary" size="large" icon="Edit"
+                                circle></el-button>
+                        </el-tooltip>
+
+                        <el-popconfirm @confirm="this.deleteUser(item)" title="确认要删除账户吗？" confirm-button-text="确定"
+                            cancel-button-text="取消" confirm-button-type="danger">
+                            <template #reference>
+                                <el-button type="danger" size="large" icon="Delete" circle></el-button>
+                            </template>
+                        </el-popconfirm>
+
+                    </div>
+                </div>
+
+                <el-pagination style="justify-content: center;" background hide-on-single-page="true"
+                    layout="prev, pager, next" :total="this.userCount" :default-page-size="this.defaultPageSize"
+                    v-model:current-page="this.currentPage"
+                    @current-change="number => this.onClick_currentChange(number)"></el-pagination>
+            </div>
+
+
         </div>
 
     </div>

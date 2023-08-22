@@ -41,13 +41,13 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestBody User user, HttpSession session) {
         // 查询数据库
-        List<User> userList = userMapper.queryUser(user);
+        List<User> userList = userMapper.user_login(user);
         if (userList.size() == 1) {
             User _user = userList.get(0);
             // 用户已启用
             if (_user.getEnable() == 1) {
                 Date date = new Date();
-                userMapper.updateLastLoginTime(_user, date);
+                userMapper.update_last_login_time(_user, date);
                 // 将登录信息写入session
                 session.setAttribute("username", _user.getUsername());
                 session.setAttribute("role", _user.getRole());
@@ -78,7 +78,7 @@ public class LoginController {
 
     @PostMapping("/register")
     public String register(@RequestBody User user, HttpSession session) {
-        List<User> userByUsername = userMapper.getUserByUsername(user.getUsername());
+        List<User> userByUsername = userMapper.get_user_by_username(user.getUsername());
         if (!userByUsername.isEmpty()) {
             return Response.response(null, 500, "用户名已被使用");
         }
@@ -86,7 +86,7 @@ public class LoginController {
         user.setCreate_time(new Date().getTime());
         // 默认不启用该用户
         user.setEnable(0);
-        Integer effectRows = userMapper.addNewUser(user);
+        Integer effectRows = userMapper.add_new_user(user);
         return Response.response(effectRows, 200, "账户注册成功");
     }
 

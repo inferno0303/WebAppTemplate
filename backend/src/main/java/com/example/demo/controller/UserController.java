@@ -17,10 +17,11 @@ public class UserController {
     @Autowired
     UserMapper userMapper;
 
+    // 用户获取自己的信息
     @GetMapping("/get_user_info")
     public String get_user_info(HttpSession session) {
         Object username = session.getAttribute("username");
-        List<User> userByUsername = userMapper.getUserByUsername(username.toString());
+        List<User> userByUsername = userMapper.get_user_by_username(username.toString());
         if (userByUsername.size() != 1)
             return Response.response(null, 403, "当前用户未登录");
         User user = userByUsername.get(0);

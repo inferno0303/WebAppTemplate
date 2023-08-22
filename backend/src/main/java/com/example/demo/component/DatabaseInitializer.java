@@ -29,8 +29,8 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
 
             // 执行初始化SQL语句，禁用事务管理
             jdbcTemplate.execute(sql);
-            // jdbcTemplate.execute("INSERT INTO `user` (username, password, role, create_time, enable) VALUES (\"admin\", \"admin\", \"admin\", 0, 1);");
-            // jdbcTemplate.execute("INSERT INTO `user` (username, password, role, create_time, enable) VALUES (\"a\", \"a\", \"user\", 0, 1);");
+//          jdbcTemplate.execute("INSERT INTO `user` (username, password, role, create_time, enable) VALUES (\"admin\", \"admin\", \"admin\", 0, 1);");
+//          jdbcTemplate.execute("INSERT INTO `user` (username, password, role, create_time, enable) VALUES (\"a\", \"a\", \"user\", 0, 1);");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
