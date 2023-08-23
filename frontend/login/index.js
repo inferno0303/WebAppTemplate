@@ -1,13 +1,29 @@
-// axios的默认配置
+// axios配置
 axios.defaults.baseURL = 'http://127.0.0.1:8888';
 axios.defaults.withCredentials = true;
+axios.interceptors.response.use(function (response) {
+    return response;
+}, async function (error) {
+    // 如果收到 HTTP 403 响应就回到登录页
+    if (error.response.status === 403) {
+        ElementPlus.ElMessage({ message: "您的登录状态已经失效，请重新登录", type: 'warning' });
+        // 等待2秒
+        await new Promise((resolve) => {
+            setTimeout(() => resolve(), 2000);
+        });
+        // 跳转到登录页
+        const currentDomain = new URL(window.location.href).origin;
+        window.location.href = currentDomain + "/login/";
+    }
+    return Promise.reject(error);
+});
 
 // 定义Vue组件
 const App = {
 
     data() {
         return {
-            title: "基于xbc的管理系统",
+            title: "信息管理系统",
             // 登录信息
             loginBox: { "username": null, "password": null },
             LoginBtnLoading: false,
@@ -15,7 +31,7 @@ const App = {
             isLogin: false,
             // 注册信息
             dialogVisible: false,
-            register: { "username": null, "email": null, "password": null, "password_again": null },
+            register: { "username": null, "nickname": null, "email": null, "phone": null, "password": null, "password_again": null },
             registerBtnLoading: false
         };
     },
@@ -67,7 +83,7 @@ const App = {
             await axios({
                 method: "POST",
                 url: "/register",
-                data: { "username": this.register.username, "password": this.register.password }
+                data: this.register
             })
                 .then(response => {
                     if (response.data.code === 200) {
@@ -143,7 +159,7 @@ const App = {
             const currentURL = window.location.href;
             const currentDomain = new URL(currentURL).origin;
             // 根据用户角色的不同，跳转到不同的落地页
-            if (role === 'user') window.location.href = currentDomain + "/home/";
+            if (role === 'user') window.location.href = currentDomain + "/user/";
             if (role === 'admin') window.location.href = currentDomain + "/admin/";
         }
 

@@ -3,8 +3,8 @@
 该项目是一个前后端分离项目（WebApp）的工程模板，包含登录、注册、账户管理的基本代码，基于 SpringBoot 和 Vue.js 框架，自用😄
 
 ```
-version: v20230814
-author: inferno0303@github
+version: v20230824
+author: @inferno0303
 ```
 
 ## 如何使用
@@ -49,3 +49,10 @@ author: inferno0303@github
 - feat: 实现了admin用户管理功能
 - feat: 实现了user用户信息更改、更换头像功能
 - fix: 解决了后端由于拦截器引起的OPTIONS请求被跨域阻止问题
+
+### 20230824
+- refactor: 重构了前端部分代码，将样式转移至 common_style
+- feat: 针对 HTTP-403 响应自动跳转到登录页
+- feat: 注册功能现在可以填写更多信息了，包括昵称、邮箱、电话
+- feat: user表的username字段增加唯一索引，防止username字段有重复值
+- feat: 后端在启动时，确保user表中只有一个admin用户，确保可以进入管理页

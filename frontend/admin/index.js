@@ -1,6 +1,22 @@
-// axios的默认配置
+// axios配置
 axios.defaults.baseURL = 'http://127.0.0.1:8888';
 axios.defaults.withCredentials = true;
+axios.interceptors.response.use(function (response) {
+    return response;
+}, async function (error) {
+    // 如果收到 HTTP 403 响应就回到登录页
+    if (error.response.status === 403) {
+        ElementPlus.ElMessage({ message: "您的登录状态已经失效，请重新登录", type: 'warning' });
+        // 等待2秒
+        await new Promise((resolve) => {
+            setTimeout(() => resolve(), 2000);
+        });
+        // 跳转到登录页
+        const currentDomain = new URL(window.location.href).origin;
+        window.location.href = currentDomain + "/login/";
+    }
+    return Promise.reject(error);
+});
 
 // 定义Vue组件
 const App = {
@@ -13,7 +29,6 @@ const App = {
             defaultPageSize: 10,
             // 当前页数：被分页器current-page属性绑定，默认值1
             currentPage: 1,
-
             // 用户列表
             userList: []
         };

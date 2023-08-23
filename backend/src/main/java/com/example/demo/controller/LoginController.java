@@ -82,10 +82,11 @@ public class LoginController {
         if (!userByUsername.isEmpty()) {
             return Response.response(null, 500, "用户名已被使用");
         }
+        // 设置该用户角色为user
         user.setRole("user");
-        user.setCreate_time(new Date().getTime());
         // 默认不启用该用户
         user.setEnable(0);
+        user.setCreate_time(new Date().getTime());
         Integer effectRows = userMapper.add_new_user(user);
         return Response.response(effectRows, 200, "账户注册成功");
     }

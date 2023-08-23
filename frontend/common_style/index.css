@@ -1,11 +1,7 @@
 @font-face {
     font-family: 'HarmonyOS_Sans_SC';
-    /* 自定义字体的名称 */
     src: url('../static/fonts/HarmonyOS_Sans_SC_Regular.ttf') format('truetype');
-    /* 字体文件的路径和格式 */
-    /* 可选的其他字体属性，例如 font-weight 和 font-style */
 }
-
 
 body {
     margin: 0;
@@ -17,15 +13,100 @@ input {
     font-family: inherit;
 }
 
+/* headers */
+.headers {
+    height: 48px;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    background-color: #041725;
+}
+
+/* 左边的标题 */
+.headers_left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 1rem;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+/* 中间的导航按钮 */
+.headers_center {
+    flex-grow: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.headers_center .navigate_btn {
+    padding: 0 30px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #fff;
+    background-color: none;
+    text-decoration: none;
+    transition: all 250ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 导航按钮鼠标悬停 */
+.headers_center .navigate_btn:hover {
+    background-color: rgb(0, 153, 255, 0.3);
+}
+
+/* 右边的按钮 */
+.headers_right {
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+}
+
+.headers_right .navigate_btn {
+    padding: 0 30px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #aaa;
+    background-color: none;
+    text-decoration: none;
+    transition: all 250ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headers_right .navigate_btn:hover {
+    color: #fff;
+    background-color: rgb(255, 0, 0, 0.3);
+}
+
+/* 在窗口宽度小于某个阈值时，隐藏左边的标题，隐藏右边的按钮 */
+@media (max-width: 720px) {
+    .headers_left {
+        display: none;
+    }
+
+    .headers_right {
+        display: none;
+    }
+}
+
+/* headers end */
+
 .container {
     max-width: 1024px;
     margin: 15px auto;
     padding: 15px 60px;
 }
 
+/* card */
 .card {
     max-width: 800px;
-    min-width: 500px;
+    min-width: 600px;
     margin: 0 auto;
     padding-bottom: 30px;
     background-color: #fafafa;
@@ -60,13 +141,9 @@ input {
     line-height: 2.5;
 }
 
-.text_hint {
-    padding: 0 15px;
-    background-color: #eee;
-    border-radius: 4px;
-}
+/* card end */
 
-/* 头像 */
+/* avatar */
 .avatar {
     margin: 0 auto;
     width: 100px;
@@ -80,6 +157,9 @@ input {
     filter: brightness(70%);
 }
 
+/* avatar end */
+
+/* list */
 .list {
     display: grid;
     row-gap: 30px;
@@ -106,7 +186,10 @@ input {
     background-color: rgba(64, 158, 255, 0.25);
 }
 
-.centered_flexbox {
+/* list end */
+
+/* flexbox */
+.flexbox_center {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -120,6 +203,9 @@ input {
     flex-shrink: 0
 }
 
+/* flexbox end */
+
+/* text */
 .text_big {
     font-size: 18px;
     color: #666;
@@ -135,7 +221,18 @@ input {
     text-align: center;
 }
 
+.text_hint {
+    padding: 0 15px;
+    background-color: #eee;
+    border-radius: 4px;
+}
+
+/* text end */
+
+/* margin */
 .margin_left_right_auto {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* margin end */

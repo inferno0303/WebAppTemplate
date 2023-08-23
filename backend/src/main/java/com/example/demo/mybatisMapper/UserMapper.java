@@ -23,7 +23,7 @@ public interface UserMapper {
     public List<User> get_user_by_username(String username);
 
     // 注册接口：用于新增用户
-    @Insert("INSERT INTO user (username, password, role, create_time, enable) VALUES (#{username}, #{password}, #{role}, #{create_time}, #{enable})")
+    @Insert("INSERT INTO user (username, password, nickname, role, email, phone, enable, create_time) VALUES (#{username}, #{password}, #{nickname}, #{role}, #{email}, #{phone}, #{enable}, #{create_time})")
     public Integer add_new_user(User user);
 
     // 用户接口：用于更改用户信息

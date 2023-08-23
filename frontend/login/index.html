@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录 | XX系统</title>
+    <title>登录 | 信息管理系统</title>
     <!-- favicon-->
     <link rel="icon" href="../favicon.png">
     <!-- vue -->
@@ -26,8 +26,11 @@
 
                 <div class="login_tip" v-show="isLogin">
                     <span>当前检测到 <strong>{{this.currentUser.username}}</strong> 用户已登录</span>
-                    <button v-show="this.currentUser.role === 'user'" @click="this._navigateToHomePage(this.currentUser.role)" style="color: #337ecc;">进入用户首页</button>
-                    <button v-show="this.currentUser.role === 'admin'" @click="this._navigateToHomePage(this.currentUser.role)" style="color: #337ecc;">进入管理员模式</button>
+                    <button v-show="this.currentUser.role === 'user'"
+                        @click="this._navigateToHomePage(this.currentUser.role)" style="color: #337ecc;">进入用户首页</button>
+                    <button v-show="this.currentUser.role === 'admin'"
+                        @click="this._navigateToHomePage(this.currentUser.role)"
+                        style="color: #337ecc;">进入管理员模式</button>
                     <button @click="this.onClick_logoutBtn" style="color: #c45656;">注销登录</button>
                 </div>
 
@@ -41,8 +44,8 @@
                             v-model="this.loginBox.password" placeholder="密码"></el-input>
                     </div>
                 </form>
-                <el-button class="form_btn" id="loginBtn" type="primary" :disabled="!isLoginBtnEnable"
-                    :loading="this.LoginBtnLoading" @click="onClick_loginBtn">登 录 </el-button>
+                <el-button class="form_btn" id="loginBtn" @click="onClick_loginBtn" type="primary"
+                    :disabled="!isLoginBtnEnable" :loading="this.LoginBtnLoading" icon="Finished">登 录 </el-button>
                 <div class="form_group">
                     <button class="register_dialog_popup_btn"
                         @click="this.dialogVisible = !this.dialogVisible">注册用户</button>
@@ -54,11 +57,16 @@
         <el-dialog v-model="dialogVisible" title="注册用户" width="450px">
             <p style="text-align: center;">注册用户后，需<strong>等待管理员审批</strong>通过才可以使用。</p>
             <div class="form_group">
-                <el-input class="input_box" prefix-icon="User" v-model="register.username"
-                    placeholder="新用户名"></el-input>
+                <el-input class="input_box" prefix-icon="User" v-model="register.username" placeholder="用户名"></el-input>
+            </div>
+            <div class="form_group">
+                <el-input class="input_box" prefix-icon="Star" v-model="register.nickname" placeholder="昵称"></el-input>
             </div>
             <div class="form_group">
                 <el-input class="input_box" prefix-icon="Message" v-model="register.email" placeholder="邮箱"></el-input>
+            </div>
+            <div class="form_group">
+                <el-input class="input_box" prefix-icon="Phone" v-model="register.phone" placeholder="电话"></el-input>
             </div>
             <div class="form_group">
                 <el-input class="input_box" type="password" prefix-icon="Lock" show-password v-model="register.password"
@@ -68,8 +76,8 @@
                 <el-input class="input_box" type="password" prefix-icon="Lock" show-password
                     v-model="register.password_again" placeholder="确认密码"></el-input>
             </div>
-            <el-button class="form_btn" type="primary" :disabled="!isRegisterBtnEnable"
-                :loading="this.registerBtnLoading" @click="onClick_registerBtn">确定注册
+            <el-button class="form_btn" @click="onClick_registerBtn" type="primary" :disabled="!isRegisterBtnEnable"
+                :loading="this.registerBtnLoading" icon="Finished">确定注册
             </el-button>
         </el-dialog>
 

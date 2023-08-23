@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>主页 | XX系统</title>
+    <title>用户 | 信息管理系统</title>
     <!-- favicon-->
     <link rel="icon" href="../favicon.png">
     <!-- vue -->
@@ -21,11 +21,10 @@
 <body>
     <div id="app">
         <!-- headers -->
-        <link rel="stylesheet" href="../common/headers.css" />
         <div class="headers">
-            <div class="headers_left">基于xbc的管理系统</div>
+            <div class="headers_left">信息管理系统</div>
             <div class="headers_center">
-                <a class="navigate_btn" style="background-color: #337ecc;" href="/home/">主页</a>
+                <a class="navigate_btn" style="background-color: #337ecc;" href="/user/">主页</a>
                 <a class="navigate_btn">页面1</a>
                 <a class="navigate_btn">页面2</a>
                 <a class="navigate_btn">页面3</a>
@@ -62,54 +61,55 @@
                     </div>
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">用户名</div>
-                        <div class="text_hint">{{this.userInfo?.username}}</div>
+                        <div class="text_hint">{{this.userInfo.username}}</div>
                     </div>
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">昵称</div>
-                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.nickname}}</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo.nickname ?? "未设置"}}</div>
                         <el-input v-else v-model="userInfo.nickname"></el-input>
                     </div>
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">邮箱</div>
-                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.email?? "未设置"}}</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo.email ?? "未设置"}}</div>
                         <el-input v-else v-model="userInfo.email"></el-input>
                     </div>
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">密码</div>
-                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.password}}</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this._hidePasswordString(this.userInfo.password)}}</div>
                         <el-input v-else v-model="userInfo.password"></el-input>
                     </div>
 
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">性别</div>
-                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.gender}}</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo.gender ?? "未设置"}}</div>
                         <el-input v-else v-model="userInfo.gender"></el-input>
                     </div>
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">电话</div>
-                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo?.phone?? "未设置"}}</div>
+                        <div class="text_hint" v-if="!this.isEdit">{{this.userInfo.phone ?? "未设置"}}</div>
                         <el-input v-else v-model="userInfo.phone"></el-input>
                     </div>
                     <div class="form_item">
+                        <div style="text-align: right; font-weight: bold;">账户状态</div>
+                        <div class="text_hint">{{this._show_accountStatus(this.userInfo.enable)}}</div>
+                    </div>
+                    <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">上次登录</div>
-                        <div class="text_hint">{{this.userInfo?.last_login_time?? "从未登录"}}</div>
+                        <div class="text_hint">{{this._timestampToDateString(this.userInfo.last_login_time)}}</div>
                     </div>
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">创建日期</div>
-                        <div class="text_hint">{{this.userInfo?.create_time?? "无"}}</div>
+                        <div class="text_hint">{{this._timestampToDateString(this.userInfo.create_time)}}</div>
                     </div>
                 </div>
             </div>
 
-            <el-divider content-position="left">其他信息</el-divider>
-
         </div>
-
 
     </div>
 </body>
 
 <script src="index.js"></script>
-<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="../common_style/index.css">
 
 </html>

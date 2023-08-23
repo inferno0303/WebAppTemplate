@@ -1,6 +1,53 @@
-// axios的默认配置
+// axios配置
 axios.defaults.baseURL = 'http://127.0.0.1:8888';
 axios.defaults.withCredentials = true;
+axios.interceptors.response.use(function (response) {
+    return response;
+}, async function (error) {
+    // 如果收到 HTTP 403 响应就回到登录页
+    if (error.response.status === 403) {
+        ElementPlus.ElMessage({ message: "您的登录状态已经失效，请重新登录", type: 'warning' });
+        // 等待2秒
+        await new Promise((resolve) => {
+            setTimeout(() => resolve(), 2000);
+        });
+        // 跳转到登录页
+        const currentDomain = new URL(window.location.href).origin;
+        window.location.href = currentDomain + "/login/";
+    }
+    return Promise.reject(error);
+});
+
+// utils
+// 将毫秒时间戳转换为本地时区的时间日期字符串，格式为：YYYY/MM/DD hh:mm:ss
+function show_timestampToDateString(timestamp) {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short',
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    };
+    return date.toLocaleString(options);
+}
+
+// 隐藏密码字符串，转换为 "******" 样式
+function show_hidePasswordString(passwordString) {
+    if (!passwordString) return "";
+    return '*'.repeat(passwordString.length);
+}
+
+// 将账户状态的 enable 代号转换为字符串提示
+function show_accountStatus(enable) {
+    if (enable === 0) return "未启用";
+    if (enable === 1) return "正常";
+    return "";
+}
 
 // 定义Vue组件
 const App = {
@@ -8,7 +55,7 @@ const App = {
     data() {
         return {
             // 编辑用户信息
-            userInfo: { username: "正在获取", password: "********", role: "", gender: "男", enable: "1", email: "1234567890@github.com", phone: "1234567890", last_login_time: "1234567890", create_time: "1234567890", avatar: null },
+            userInfo: { username: null, password: null, role: null, gender: null, enable: null, email: null, phone: null, last_login_time: null, create_time: null, avatar: null },
             isEdit: false,
             isUpdateBtnLoading: false,
         };
@@ -48,9 +95,7 @@ const App = {
             })
                 .then(response => {
                     if (response.data.code === 200)
-                        ElementPlus.ElMessage({
-                            message: response.data.message, type: 'success',
-                        });
+                        ElementPlus.ElMessage({ message: response.data.message, type: 'success' });
                 })
                 .catch(err => {
                     console.log(err)
@@ -110,6 +155,21 @@ const App = {
             });
             // 触发 input 元素的 click 事件，弹出文件选择框
             input.click();
+        },
+
+        // 将毫秒时间戳转换为本地时区的时间日期字符串
+        _timestampToDateString(timestamp) {
+            return show_timestampToDateString(timestamp)
+        },
+
+        // 隐藏密码字符串
+        _hidePasswordString(passwordString) {
+            return show_hidePasswordString(passwordString)
+        },
+
+        // 显示账户状态
+        _show_accountStatus(enable) {
+            return show_accountStatus(enable)
         }
 
     },
