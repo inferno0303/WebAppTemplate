@@ -1,9 +1,7 @@
 package com.example.demo.mybatisMapper;
 
 import com.example.demo.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
 import java.util.List;
@@ -28,6 +26,14 @@ public interface UserMapper {
     @Insert("INSERT INTO user (username, password, role, create_time, enable) VALUES (#{username}, #{password}, #{role}, #{create_time}, #{enable})")
     public Integer add_new_user(User user);
 
+    // 用户接口：用于更改用户信息
+    @Update("UPDATE user SET password=#{password}, nickname=#{nickname}, email=#{email}, phone=#{phone}, gender=#{gender} WHERE id=#{id} AND username=#{username}")
+    public Integer update_user_info(Integer id, String username, String password, String nickname, String email, String phone, String gender);
+
+    // 用户接口：用于更新头像
+    @Update("UPDATE user SET avatar=#{avatar} WHERE id=#{id} AND username=#{username}")
+    public Integer updateAvatar(@Param("id") Integer id, @Param("username") String username, @Param("avatar") String avatar);
+
     // [即将废弃] 管理员接口：用于访问所有的用户列表
     @Select("SELECT * FROM user")
     public List<User> get_all_user();
@@ -39,4 +45,11 @@ public interface UserMapper {
     // 管理员接口：用于访问所有的用户列表
     @Select("SELECT * FROM user LIMIT #{limit} OFFSET #{offset}")
     public List<User> admin_get_user_list(Integer limit, Integer offset);
+
+    // 管理员接口：用于启用或禁用账户
+    @Update("UPDATE user SET enable=#{enable} WHERE id=#{id} AND username=#{username}")
+    public Integer admin_enable_disable_account(@Param("id") Integer id, @Param("username") String username, @Param("enable") Integer enable);
+
+    @Delete("DELETE FROM user WHERE id=#{id} AND username=#{username}")
+    public Integer admin_delete_account(@Param("id") Integer id, @Param("username") String username);
 }

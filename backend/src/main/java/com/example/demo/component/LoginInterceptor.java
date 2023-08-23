@@ -10,20 +10,23 @@ public class LoginInterceptor implements HandlerInterceptor {
     // 实现拦截器方法，用于登录状态检查
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HttpSession session = request.getSession();
-        Object username = session.getAttribute("username");
+
+        // 对于所有的 OPTIONS 都放行请求
+        if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
 
         // 如果session中存在登录状态，则不做处理，放行请求
+        HttpSession session = request.getSession();
+        Object username = session.getAttribute("username");
         if (username != null) {
             return true;
         }
 
         // 如果session中不存在登录状态，则返回403状态码，并拦截请求
         else {
-
             // 设置状态码为403
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
+            response.setStatus(403);
             // 设置响应内容
             String errorMessage = "您还未登录，没有权限访问该接口。";
             response.setContentType("text/plain");

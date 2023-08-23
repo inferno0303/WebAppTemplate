@@ -50,16 +50,15 @@
                     <div>
                         <el-button v-if="!isEdit" @click="this.isEdit = !this.isEdit" type="primary"
                             icon="Edit">编辑信息</el-button>
-                        <el-button v-else @click="this.isEdit = !this.isEdit" type="success"
-                            icon="CircleCheckFilled">保存更改</el-button>
+                        <el-button v-else @click="this.http_updateUserInfo" type="success" icon="CircleCheckFilled"
+                            :loading="this.isUpdateBtnLoading">保存更改</el-button>
                     </div>
                 </div>
 
                 <div class="form_box">
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">头像</div>
-                        <img class="avatar" src="https://q4.qlogo.cn/g?b=qq&nk=770409504@qq.com&s=5"
-                            @click="this.onClick_changeAvatar" alt="头像" />
+                        <img class="avatar" :src="this.userInfo.avatar" @click="this.onClick_changeAvatar" alt="头像" />
                     </div>
                     <div class="form_item">
                         <div style="text-align: right; font-weight: bold;">用户名</div>

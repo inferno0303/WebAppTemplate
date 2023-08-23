@@ -58,6 +58,39 @@ const App = {
             await this.http_getUserList();
             // 平滑滚动到页面顶端
             window.scrollTo({ top: 0, behavior: "smooth" });
+        },
+
+        // 启用或封禁账户
+        async onClick_enableDisableAccount(user, enable) {
+            await axios.get("/admin_enable_disable_account", {
+                params: {
+                    username: user.username,
+                    enable: enable
+                }
+            })
+                .then(async response => {
+                    if (!response.data.code === 200)
+                        return -1;
+                    await this.http_getUserList();
+                    ElementPlus.ElMessage({ message: response.data.message, type: 'success' });
+                })
+                .catch(err => { })
+        },
+
+        // 删除账户
+        async onClick_deleteAccount(user) {
+            await axios.get("/admin_delete_account", {
+                params: {
+                    username: user.username
+                }
+            })
+                .then(async response => {
+                    if (!response.data.code === 200)
+                        return -1;
+                    await this.http_getUserList();
+                    ElementPlus.ElMessage({ message: response.data.message, type: 'success' });
+                })
+                .catch(err => { })
         }
 
     },

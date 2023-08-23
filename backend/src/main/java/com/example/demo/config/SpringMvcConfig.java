@@ -9,20 +9,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SpringMvcConfig implements WebMvcConfigurer {
 
-    // 允许接受跨域请求
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("*")
-                .allowedHeaders("*")
-                .allowCredentials(true);
-    }
-
     // 给SpringMvc添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
         // 添加自定义拦截器
         registry.addInterceptor(new LoginInterceptor())
                 // 对所有请求进行拦截
@@ -40,5 +29,15 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                         "/**.js",
                         "/favicon.*"
                 );
+    }
+
+    // 放通访问后，添加允许接受跨域请求的 Headers
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }

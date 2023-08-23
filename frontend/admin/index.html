@@ -46,25 +46,26 @@
 
                     <!-- 左边的信息部分，弹性扩展到最大宽度 -->
                     <div
-                        style="display: flex; align-items: center; justify-content: flex-start; gap: 45px; flex-grow: 1; flex-shrink: 0;">
+                        style="display: flex; align-items: center; justify-content: flex-start; gap: 30px; flex-grow: 1; flex-shrink: 0;">
                         <div class="text_small" style="color: #aaa;">
                             #{{(this.currentPage - 1) * this.defaultPageSize + index + 1}}
                         </div>
-                        <div class="list" style="row-gap: 8px;">
-                            <img :src="item.avatar" class="avatar" alt="{{item.username}}" />
-                            <div class="text_small text_align_center">用户名：{{item.username}}</div>
+                        <div class="list" style="padding-right: 60px;">
+                            <img :src="item.avatar" class="avatar" alt="头像" />
                         </div>
-                        <div class="list" style="row-gap: 4px;">
+                        <div class="list" style="width: 12rem; row-gap: 5px;">
+                            <div class="text_small">用户名：{{item.username}}</div>
                             <div class="text_small">昵称：{{item.nickname}}</div>
                             <div class="text_small">邮箱：{{item.email}}</div>
                             <div class="text_small">电话：{{item.phone}}</div>
                             <div class="text_small">性别：{{item.gender}}</div>
                         </div>
-                        <div class="list" style="row-gap: 4px;">
+                        <div class="list" style="width: 12rem; row-gap: 5px;">
                             <div class="text_small">账户类型：{{item.role}}</div>
                             <div class="text_small">密码：{{item.password}}</div>
                             <div class="text_small">最后登录：{{item.last_login_time}}</div>
                             <div class="text_small">注册时间：{{item.create_time}}</div>
+                            <div class="text_small">账户状态：{{item.enable === 1 ? "正常" : "停用"}}</div>
                         </div>
                     </div>
 
@@ -72,27 +73,26 @@
                     <div
                         style="display: flex; align-items: center; gap: 10px; flex-grow: 0; flex-shrink: 0;">
 
-
-                        <el-popconfirm v-if="item.enable === 0" @confirm="this.enableUser(item)" title="确认要通过注册审批吗？"
-                            confirm-button-text="确定" cancel-button-text="取消" confirm-button-type="danger">
-                            <template #reference>
-                                <el-button type="success" size="large" icon="Check" circle></el-button>
-                            </template>
-                        </el-popconfirm>
-                        
-                        <el-popconfirm v-else @confirm="this.disableUser(item)" title="确认要封禁账户吗？"
-                            confirm-button-text="确定" cancel-button-text="取消" confirm-button-type="warning">
-                            <template #reference>
-                                <el-button type="warning" size="large" icon="Close" circle></el-button>
-                            </template>
-                        </el-popconfirm>
-
                         <el-tooltip content="编辑用户账户信息">
                             <el-button @click="editUserBtnOnClick(item)" type="primary" size="large" icon="Edit"
                                 circle></el-button>
                         </el-tooltip>
 
-                        <el-popconfirm @confirm="this.deleteUser(item)" title="确认要删除账户吗？" confirm-button-text="确定"
+                        <el-popconfirm v-if="item.enable === 0" @confirm="() => this.onClick_enableDisableAccount(item, 1)" title="确认要通过注册审批吗？" confirm-button-text="确定"
+                            cancel-button-text="取消" confirm-button-type="success">
+                            <template #reference>
+                                <el-button color="#626aef" size="large" icon="Check" circle></el-button>
+                            </template>
+                        </el-popconfirm>
+                        
+                        <el-popconfirm v-else @confirm="() => this.onClick_enableDisableAccount(item, 0)" title="确认要封禁账户吗？" confirm-button-text="确定"
+                            cancel-button-text="取消" confirm-button-type="danger">
+                            <template #reference>
+                                <el-button type="info" size="large" icon="Close" circle></el-button>
+                            </template>
+                        </el-popconfirm>
+
+                        <el-popconfirm @confirm="this.onClick_deleteAccount(item)" title="确认要删除账户吗？" confirm-button-text="确定"
                             cancel-button-text="取消" confirm-button-type="danger">
                             <template #reference>
                                 <el-button type="danger" size="large" icon="Delete" circle></el-button>

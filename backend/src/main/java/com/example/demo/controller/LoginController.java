@@ -34,7 +34,7 @@ public class LoginController {
             currentUser.put("last_login_time", last_login_time);
             return Response.response(currentUser, 200, "当前用户已登录");
         } else {
-            return Response.response(null, 403, "当前用户未登录");
+            return Response.response403("当前用户未登录");
         }
     }
 

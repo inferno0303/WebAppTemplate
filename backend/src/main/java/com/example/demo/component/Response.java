@@ -12,4 +12,20 @@ public class Response {
         map.put("data", data);
         return JSON.toJSONString(map);
     }
+
+    public static String response403(String message) {
+        HashMap<String, Object> map = new HashMap<>(3);
+        map.put("code", 403);
+        map.put("message", message);
+        map.put("data", null);
+        return JSON.toJSONString(map);
+    }
+
+    public static String response500(String message) {
+        HashMap<String, Object> map = new HashMap<>(3);
+        map.put("code", 500);
+        map.put("message", message);
+        map.put("data", null);
+        return JSON.toJSONString(map);
+    }
 }
